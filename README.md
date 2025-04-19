@@ -52,3 +52,12 @@ Now, you can run `gleeby` from anywhere in your terminal!
 
 ### Step 4: Enjoy playing with Gleeby!
 Simply type `gleeby` in your terminal to start the game.
+
+
+---
+
+## Enjoy Gleeby! 🎮
+
+Have fun with your new terminal pet! If you have any questions or feedback, feel free to open an issue or mail me at mossware@tuta.io
+
+---
