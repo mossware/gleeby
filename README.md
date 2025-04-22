@@ -2,11 +2,13 @@
   <img src="gleeby_image.png" alt="Gleeby Game"/>
 </p>
 
-# **Gleeby - The Game**
+# **[UPD] Gleeby - The Game**
 
 **Gleeby** is a quirky, interactive space pet that you can care for right in your terminal! Inspired by Tamagotchi, Gleeby allows you to feed, play, and take care of a small cosmic creature. But beware, it gets hungry and sad if neglected. 🛸
 
----
+<h1 align="center">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&color=FFD580&center=true&vCenter=true&width=435&lines=Taught+Gleeby+capitalism.;Collects+shiny+things+for+status." alt="Typing SVG" />
+</h1>
 
 ### 🌟 **Features**
 - 🍽️ **Feed Gleeby** to keep it happy and well-fed
