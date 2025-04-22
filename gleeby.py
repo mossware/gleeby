@@ -19,7 +19,6 @@ def load_random_gleeby_art():
     with open(art_path, "r") as file:
         return file.read()
 
-
 moods = [
     "(*≧▽≦)", "(｡•́︿•̀｡) zzz", "(*´﹃｀*)",
     "(╥﹏╥)", "(≖︿≖)", "(＾▽＾)", "(¬_¬ )"
@@ -47,9 +46,13 @@ if os.path.exists(state_path):
         hunger = state.get("hunger", 7)
         happiness = state.get("happiness", 5)
         start_time = datetime.fromisoformat(state.get("start_time"))
+        inventory = state.get("inventory", {})
+        level = state.get("level", 1)
 else:
     hunger = 7
     happiness = 5
+    inventory = {}
+    level = 1
     start_time = datetime.now()
 
 last_event_time = datetime.now()
@@ -60,8 +63,22 @@ def save_state():
         json.dump({
             "hunger": hunger,
             "happiness": happiness,
-            "start_time": start_time.isoformat()
+            "start_time": start_time.isoformat(),
+            "inventory": inventory,
+            "level": level
         }, file)
+
+def check_level_up():
+    global inventory, level
+    requirements = {1: 5, 2: 10, 3: 25}
+    max_level = max(requirements.keys())
+    current_required = requirements.get(level, 9999)
+    if all(inventory.get(item, 0) >= current_required for item in ["shiny rock", "alien flower", "comet dust", "star fragment", "moon shard"]):
+        print(f"\n🎉 Gleeby leveled up to level {level + 1}!! 🎉")
+        level += 1
+        for item in inventory:
+            inventory[item] -= current_required
+        inventory = {k: v for k, v in inventory.items() if v > 0}
 
 def print_gleeby():
     os.system("clear")
@@ -70,6 +87,24 @@ def print_gleeby():
     print("Gleeby says:", random.choice(gibberish))
     print(f"Happiness: {happiness}/10")
     print(f"Hunger: {hunger}/10")
+    print(f"Level: {level}")
+
+    item_emojis = {
+        "shiny rock": "🪨",
+        "alien flower": "🌸👽",
+        "comet dust": "✨",
+        "star fragment": "🌟",
+        "moon shard": "🌙"
+    }
+
+    print("\nInventory:")
+    if inventory:
+        for item, count in inventory.items():
+            emoji = item_emojis.get(item, "❓")
+            print(f"- {emoji} {item}: {count}")
+    else:
+        print("~ (empty)")
+
 
 while True:
     if datetime.now() - last_hunger_tick > timedelta(seconds=180):
@@ -97,28 +132,59 @@ while True:
     print("1 - Feed")
     print("2 - Play")
     print("3 - Put to sleep")
-    print("4 - Quit")
+    print("4 - Go for a walk")
+    print("5 - Quit")
 
     choice = input("\n> ")
 
     if choice == "1":
         print("\n🍽️ Gleeby chomps your offering...\n")
-        hunger = min(hunger + 2, 10)
-        happiness = min(happiness + 1, 10)
+        if random.random() < 0.2:
+            print("😖 Gleeby hated it! He lets out a disappointed glorp.")
+            hunger = max(hunger - 1, 0)
+            happiness = max(happiness - 4, 0)
+        else:
+            print("😋 Gleeby is satisfied and wiggles happily.")
+            hunger = min(hunger + 2, 10)
+            happiness = min(happiness + 1, 10)
+
     elif choice == "2":
         print("\n🎲 You play space peek-a-boo with Gleeby!\n")
         happiness = min(happiness + 1, 10)
+
     elif choice == "3":
         print("\n🛌 Gleeby curls into a goop-ball and dozes off.\n")
         happiness = min(happiness + 2, 10)
+
     elif choice == "4":
+        print("\n🚶 Gleeby oozes outside for a walk...\n")
+        if random.random() < 0.5:
+            walk_events = {
+                "shiny rock": "You find a shiny rock.",
+                "star fragment": "You discover a glowing star fragment.",
+                "alien flower": "An alien flower blooms at your feet.",
+                "comet dust": "You catch a piece of comet dust.",
+                "moon shard": "You find a mysterious moon shard."
+            }
+            item, message = random.choice(list(walk_events.items()))
+            print(f"🌿 {message}")
+            if item in inventory:
+                inventory[item] += 1
+            else:
+                inventory[item] = 1
+        else:
+            print("🌌 A calm stroll. Nothing unusual happens.")
+
+    elif choice == "5":
         print("\n👋 Gleeby glorps away into the mist. Goodbye!\n")
         save_state()
         break
+
     else:
         print("\n?? Gleeby blinks in confusion.\n")
         happiness = max(happiness - 1, 0)
 
+    check_level_up()
     save_state()
     time.sleep(2)
     print_gleeby()
