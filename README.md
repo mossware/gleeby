@@ -2,7 +2,7 @@
   <img src="gleeby_image.png" alt="Gleeby Game"/>
 </p>
 
-# **[UPD] Gleeby - The Game**
+# **[UPD] Gleeby**
 
 **Gleeby** is a quirky, interactive space pet that you can care for right in your terminal! Inspired by Tamagotchi, Gleeby allows you to feed, play, and take care of a small cosmic creature. But beware, it gets hungry and sad if neglected. 🛸
 
